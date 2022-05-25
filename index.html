@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="node_modules/intl-tel-input/build/js/intlTelInput.js"></script>
+    <title>Sign Up!</title>
+</head>
+<body>
+    <div class="background-container">
+      <div class="logo">
+          <img src="logo.png" alt="logo-img" class="logo-img">
+          <h1 class="logo-name">WESOME SERVICE</h1> 
+      </div>
+      <div class="credits">
+        Photo by 
+            <a href="https://unsplash.com/@pawel_czerwinski?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Pawel Czerwinski</a>  
+        on 
+            <a href="https://unsplash.com/s/photos/building?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+      </div>
+    </div> 
+    <div class="form-container">
+        <header class="intro">
+            <p>
+                This is not a real online service! You know you need something like this in your life to help you realize your deepest dreams. Sign up <em>now</em> to get started. <br>
+                You <em>know</em> you want to.            
+            </p>
+        </header> 
+        <form action="/" method="post" class="form">
+            <fieldset>
+                <div>
+                    <h3>Let's do this!</h3>
+                </div>
+                <div class="inputs">
+                    <div>
+                        <label for="firstName">First Name:
+                            <abbr title="This field is mandatory" aria-label="required">*</abbr>
+                        </label>
+                        <input type="text" id="firstName" name="firstName" placeholder="Your First Name" required>
+                    </div>
+                    <div>
+                        <label for="lastName">Last Name:
+                            <abbr title="This field is mandatory" aria-label="required">*</abbr>
+                        </label>
+                        <input type="text" id="lastName" name="lastName" placeholder="Your Last Name" required>
+                    </div>
+                    <div>
+                        <label for="email">E-mail:
+                            <abbr title="This field is mandatory" aria-label="required">*</abbr>
+                        </label>
+                        <input type="email" id="email" name="email" placeholder="youremail@domain.com" required>
+                    </div>
+                    <div>
+                        <label for="phoneNumber">Phone Number:
+                            <abbr title="This field is mandatory" aria-label="required">*</abbr>
+                        </label>
+                        <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="" required>
+                    </div>
+                    <div>
+                        <label for="password">Password:
+                            <abbr title="This field is mandatory" aria-label="required">*</abbr>
+                        </label>
+                        <input type="password" id="password" name="password" pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$" autocomplete="new-password" required>
+                    </div>
+                    <div>
+                        <label for="confirmPassword">Confirm Password:
+                            <abbr title="This field is mandatory" aria-label="required">*</abbr>
+                        </label>
+                        <input type="password" id="confirmPassword" autocomplete="new-password" required>
+                    </div>  
+                </div>
+            </fieldset>
+            <footer>
+                <button type="submit" class="submit">Create Account  </button>
+                <div>
+                Already have an account? <a href="blank">Log in</a>
+                </div>
+            </footer>
+       </form>
+    </div> 
+    <script>
+        const input = document.querySelector("#phoneNumber");
+        window.intlTelInput(input, {
+            // allowDropdown: false,
+            // autoHideDialCode: false,
+            autoPlaceholder: "aggressive",
+            //customPlaceholder: function(selectedCountryPlaceholder, selectedCountryData) {
+            //    return "e.g. " + selectedCountryPlaceholder;
+            //},
+            // dropdownContainer: document.body,
+            // excludeCountries: ["us"],
+            // formatOnDisplay: false,
+            geoIpLookup: function(callback) {
+            $.get("http://ipinfo.io", function() {}, "jsonp").always(function(resp) {
+                var countryCode = (resp && resp.country) ? resp.country : "";
+                callback(countryCode);
+            });
+            },
+            // hiddenInput: "full_number",
+            // initialCountry: "auto",
+            // localizedCountries: { 'de': 'Deutschland' },
+            // nationalMode: false,
+            // onlyCountries: ['us', 'gb', 'ch', 'ca', 'do'],
+            placeholderNumberType: "MOBILE",
+            // preferredCountries: ['cn', 'jp'],
+            // separateDialCode: true,
+            utilsScript: "node_modules/intl-tel-input/build/js/utils.js",
+        });
+        const form = document.querySelector('.form');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const submitButton = document.querySelector('.submit');
+        password.addEventListener('input', () => {
+            if (password.validity.patternMismatch) { 
+                password.setCustomValidity('Password must be at least 8 char long, and include at least a number, an uppercase letter and a special char');
+            } else {
+                password.setCustomValidity('')
+            }
+            password.reportValidity();
+        })
+        confirmPassword.addEventListener('input', () => {
+            if (confirmPassword.value !== password.value) {
+                confirmPassword.setCustomValidity('Passwords must match')
+            } else {
+                confirmPassword.setCustomValidity('')
+            }
+            confirmPassword.reportValidity()
+;       })
+    </script>
+</body>
+</html>
