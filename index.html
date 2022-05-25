@@ -81,8 +81,8 @@
        </form>
     </div> 
     <script>
-        const input = document.querySelector("#phoneNumber");
-        window.intlTelInput(input, {
+        const phone = document.querySelector("#phoneNumber");
+        const iti = window.intlTelInput(phone, {
             // allowDropdown: false,
             // autoHideDialCode: false,
             autoPlaceholder: "aggressive",
@@ -108,6 +108,14 @@
             // separateDialCode: true,
             utilsScript: "node_modules/intl-tel-input/build/js/utils.js",
         });
+        phone.addEventListener('input', () => {
+            if (!iti.isValidNumber()) {
+                phone.setCustomValidity('Invalid number')
+            } else {
+                phone.setCustomValidity('');
+            }
+            phone.reportValidity();
+        })
         const form = document.querySelector('.form');
         const password = document.getElementById('password');
         const confirmPassword = document.getElementById('confirmPassword');
